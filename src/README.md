@@ -100,8 +100,6 @@ Current local tables:
 - `wishlist`
 - `shipping_address`
 - `payment_method`
-- `user_profile`
-- `recently_viewed`
 
 Tables mainly used for current screens:
 - `cart`
@@ -169,7 +167,7 @@ Mapping by screen:
 - Checkout screen
   - Reads cart, shipping address, and payment method from SQLite
 
-## Recommended Usage For Teammates
+## Recommended Usage For The Next Phase
 
 - Use Firebase helpers for shared product catalog data
 - Use SQLite helpers for user-specific local state
