@@ -19,10 +19,35 @@ interface PlatziProduct {
 
 const PLATZI_PRODUCTS_URL = 'https://api.escuelajs.co/api/v1/products';
 
-const FASHION_CATEGORY_NAMES = ['clothes', 'shoes'];
+const FASHION_KEYWORDS = [
+  'clothes',
+  'clothing',
+  'shoe',
+  'shoes',
+  'fashion',
+  'shirt',
+  't-shirt',
+  'tee',
+  'cap',
+  'jacket',
+  'hoodie',
+  'dress',
+  'bag',
+  'watch',
+  'sneaker',
+];
 
-const isFashionCategory = (categoryName: string): boolean => {
-  return FASHION_CATEGORY_NAMES.includes(categoryName.toLowerCase());
+const isFashionProduct = (item: PlatziProduct): boolean => {
+  const haystack = [
+    item.title,
+    item.description,
+    item.category?.name,
+    item.category?.slug,
+  ]
+    .join(' ')
+    .toLowerCase();
+
+  return FASHION_KEYWORDS.some(keyword => haystack.includes(keyword));
 };
 
 const mapPlatziProductToAppProduct = (item: PlatziProduct): Product => {
@@ -57,6 +82,6 @@ export const fetchFashionProducts = async (): Promise<Product[]> => {
   const data: PlatziProduct[] = await response.json();
 
   return data
-    .filter(item => isFashionCategory(item.category?.name ?? ''))
+    .filter(isFashionProduct)
     .map(mapPlatziProductToAppProduct);
 };

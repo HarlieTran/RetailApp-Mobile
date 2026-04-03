@@ -8,6 +8,8 @@ import React, { useEffect } from 'react';
 import {Alert, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {createTables} from './src/db/sqlite/database';
+import {seedProductsIfEmpty} from './src/db/firebase/productsFirebase';
+
 
 
 function App() {
@@ -16,6 +18,9 @@ function App() {
       try {
         await createTables();
         console.log('Tables created successfully');
+
+        const seedResult = await seedProductsIfEmpty();
+        console.log('Seed result:', seedResult);
 
       } catch (error) {
         console.error('Error creating tables:', error);
