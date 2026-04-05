@@ -6,7 +6,7 @@ import {CartItem} from '../../types/cart.types';
 export const addToCart = async (item: CartItem): Promise<void> => {
   const db = await getDbConnection();
 
-  await db.transaction(tx => {
+  await db.transaction((tx: any) => {
     tx.executeSql(
       `
         SELECT id, quantity
@@ -14,7 +14,7 @@ export const addToCart = async (item: CartItem): Promise<void> => {
         WHERE product_id = ? AND selected_size = ? AND selected_color = ?
       `,
       [item.productId, item.selectedSize, item.selectedColor],
-      (_, results) => {
+      (_: any, results: any) => {
         if (results.rows.length > 0) {
           const existingItem = results.rows.item(0);
           const newQuantity = existingItem.quantity + item.quantity;
@@ -61,11 +61,11 @@ export const getCartItems = async (): Promise<CartItem[]> => {
   const db = await getDbConnection();
   const cartItems: CartItem[] = [];
 
-  await db.transaction(tx => {
+  await db.transaction((tx: any) => {
     tx.executeSql(
       `SELECT * FROM cart ORDER BY date_added DESC`,
       [],
-      (_, results) => {
+      (_: any, results: any) => {
         for (let i = 0; i < results.rows.length; i++) {
           const row = results.rows.item(i);
           cartItems.push({
@@ -94,7 +94,7 @@ export const updateCartItemQuantity = async (
 ): Promise<void> => {
   const db = await getDbConnection();
 
-  await db.transaction(tx => {
+  await db.transaction((tx: any) => {
     if (quantity <= 0) {
       tx.executeSql(`DELETE FROM cart WHERE id = ?`, [id]);
     } else {
@@ -106,7 +106,7 @@ export const updateCartItemQuantity = async (
 export const removeFromCart = async (id: number): Promise<void> => {
   const db = await getDbConnection();
 
-  await db.transaction(tx => {
+  await db.transaction((tx: any) => {
     tx.executeSql(`DELETE FROM cart WHERE id = ?`, [id]);
   });
 };
@@ -114,7 +114,7 @@ export const removeFromCart = async (id: number): Promise<void> => {
 export const clearCart = async (): Promise<void> => {
   const db = await getDbConnection();
 
-  await db.transaction(tx => {
+  await db.transaction((tx: any) => {
     tx.executeSql(`DELETE FROM cart`);
   });
 };
@@ -123,11 +123,11 @@ export const getCartItemCount = async (): Promise<number> => {
   const db = await getDbConnection();
   let itemCount = 0;
 
-  await db.transaction(tx => {
+  await db.transaction((tx: any) => {
     tx.executeSql(
       `SELECT SUM(quantity) AS count FROM cart`,
       [],
-      (_, results) => {
+      (_: any, results: any) => {
         itemCount = results.rows.item(0).count || 0;
       },
     );

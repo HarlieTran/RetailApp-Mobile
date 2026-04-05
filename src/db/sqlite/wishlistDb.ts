@@ -4,7 +4,7 @@ import {WishlistItem} from '../../types/cart.types';
 export const addToWishlist = async (item: WishlistItem): Promise<void> => {
   const db = await getDbConnection();
 
-  await db.transaction(tx => {
+  await db.transaction((tx: any) => {
     tx.executeSql(
       `
         INSERT OR IGNORE INTO wishlist (
@@ -33,11 +33,11 @@ export const getWishlistItems = async (): Promise<WishlistItem[]> => {
   const db = await getDbConnection();
   const items: WishlistItem[] = [];
 
-  await db.transaction(tx => {
+  await db.transaction((tx: any) => {
     tx.executeSql(
       `SELECT * FROM wishlist ORDER BY date_added DESC`,
       [],
-      (_, results) => {
+      (_: any, results: any) => {
         for (let i = 0; i < results.rows.length; i++) {
           const row = results.rows.item(i);
           items.push({
@@ -61,11 +61,11 @@ export const isInWishlist = async (productId: string): Promise<boolean> => {
   const db = await getDbConnection();
   let exists = false;
 
-  await db.transaction(tx => {
+  await db.transaction((tx: any) => {
     tx.executeSql(
       `SELECT id FROM wishlist WHERE product_id = ?`,
       [productId],
-      (_, results) => {
+      (_: any, results: any) => {
         exists = results.rows.length > 0;
       },
     );
@@ -79,7 +79,7 @@ export const removeFromWishlist = async (
 ): Promise<void> => {
   const db = await getDbConnection();
 
-  await db.transaction(tx => {
+  await db.transaction((tx: any) => {
     tx.executeSql(`DELETE FROM wishlist WHERE product_id = ?`, [productId]);
   });
 };

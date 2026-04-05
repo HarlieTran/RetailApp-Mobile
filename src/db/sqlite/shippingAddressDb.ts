@@ -5,11 +5,11 @@ export const getShippingAddresses = async (): Promise<ShippingAddress[]> => {
   const db = await getDbConnection();
   const addresses: ShippingAddress[] = [];
 
-  await db.transaction(tx => {
+  await db.transaction((tx: any) => {
     tx.executeSql(
       `SELECT * FROM shipping_address ORDER BY is_default DESC, id DESC`,
       [],
-      (_, results) => {
+      (_: any, results: any) => {
         for (let i = 0; i < results.rows.length; i++) {
           const row = results.rows.item(i);
           addresses.push({
@@ -36,7 +36,7 @@ export const addShippingAddress = async (
 ): Promise<void> => {
   const db = await getDbConnection();
 
-  await db.transaction(tx => {
+  await db.transaction((tx: any) => {
     if (address.isDefault === 1) {
       tx.executeSql(`UPDATE shipping_address SET is_default = 0`);
     }
@@ -74,7 +74,7 @@ export const updateShippingAddress = async (
 ): Promise<void> => {
   const db = await getDbConnection();
 
-  await db.transaction(tx => {
+  await db.transaction((tx: any) => {
     if (address.isDefault === 1) {
       tx.executeSql(`UPDATE shipping_address SET is_default = 0`);
     }
@@ -111,7 +111,7 @@ export const updateShippingAddress = async (
 export const deleteShippingAddress = async (id: number): Promise<void> => {
   const db = await getDbConnection();
 
-  await db.transaction(tx => {
+  await db.transaction((tx: any) => {
     tx.executeSql(`DELETE FROM shipping_address WHERE id = ?`, [id]);
   });
 };

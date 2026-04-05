@@ -14,7 +14,7 @@ export const getDbConnection = async () => {
 export const createTables = async () => {
   const db = await getDbConnection();
 
-  await db.transaction(tx => {
+  await db.transaction((tx: any) => {
     tx.executeSql(`
       CREATE TABLE IF NOT EXISTS user_profile (
         id INTEGER PRIMARY KEY AUTOINCREMENT,

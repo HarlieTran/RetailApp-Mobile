@@ -5,11 +5,11 @@ export const getPaymentMethods = async (): Promise<PaymentMethod[]> => {
   const db = await getDbConnection();
   const methods: PaymentMethod[] = [];
 
-  await db.transaction(tx => {
+  await db.transaction((tx: any) => {
     tx.executeSql(
       `SELECT * FROM payment_method ORDER BY is_default DESC, id DESC`,
       [],
-      (_, results) => {
+      (_: any, results: any) => {
         for (let i = 0; i < results.rows.length; i++) {
           const row = results.rows.item(i);
           methods.push({
@@ -31,7 +31,7 @@ export const addPaymentMethod = async (
 ): Promise<void> => {
   const db = await getDbConnection();
 
-  await db.transaction(tx => {
+  await db.transaction((tx: any) => {
     if (method.isDefault === 1) {
       tx.executeSql(`UPDATE payment_method SET is_default = 0`);
     }
@@ -51,7 +51,7 @@ export const updatePaymentMethod = async (
 ): Promise<void> => {
   const db = await getDbConnection();
 
-  await db.transaction(tx => {
+  await db.transaction((tx: any) => {
     if (method.isDefault === 1) {
       tx.executeSql(`UPDATE payment_method SET is_default = 0`);
     }
@@ -70,7 +70,7 @@ export const updatePaymentMethod = async (
 export const deletePaymentMethod = async (id: number): Promise<void> => {
   const db = await getDbConnection();
 
-  await db.transaction(tx => {
+  await db.transaction((tx: any) => {
     tx.executeSql(`DELETE FROM payment_method WHERE id = ?`, [id]);
   });
 };
