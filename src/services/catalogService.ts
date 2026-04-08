@@ -7,6 +7,7 @@ const womenKeywords = ['women', 'dress', 'heel', 'bag', 'skirt', 'blouse'];
 
 const fallbackImages = fallbackProducts.map(product => product.imageUrl);
 
+// Sanitize image URL helper function
 const sanitizeImage = (value?: string, fallbackIndex = 0) => {
   if (!value) {
     return fallbackImages[fallbackIndex % fallbackImages.length];
@@ -28,6 +29,7 @@ const sanitizeImage = (value?: string, fallbackIndex = 0) => {
   return trimmed;
 };
 
+// Infer category helper function
 const inferCategory = (product: Product, index: number) => {
   const haystack = `${product.name} ${product.brand} ${product.categoryId}`.toLowerCase();
 
@@ -42,6 +44,7 @@ const inferCategory = (product: Product, index: number) => {
   return index % 2 === 0 ? 'men' : 'women';
 };
 
+// Normalize product helper function
 const normalizeProduct = (product: Product, index: number): Product => {
   const colors = product.colors?.filter(Boolean)?.length
     ? product.colors
@@ -76,6 +79,7 @@ const normalizeProduct = (product: Product, index: number): Product => {
   };
 };
 
+// Load catalog helper function
 export const loadCatalog = async (): Promise<Product[]> => {
   try {
     await seedProductsIfEmpty();
@@ -91,6 +95,7 @@ export const loadCatalog = async (): Promise<Product[]> => {
   return fallbackProducts.map(normalizeProduct);
 };
 
+// Get editorial featured products helper function
 export const getEditorialFeaturedProducts = (products: Product[]) => {
   const featured = products.filter(product => product.isFeatured);
   const source = featured.length > 0 ? featured : products;

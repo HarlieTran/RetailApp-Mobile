@@ -1,8 +1,8 @@
 import React from 'react';
 import {
+  FlatList,
   Image,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -21,45 +21,21 @@ export const CartScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView
+      {/* FlatList for cart items */}
+      <FlatList
         contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <Text style={styles.eyebrow}>Bag Summary</Text>
-          <Text style={styles.title}>Cart</Text>
-        </View>
-
-        {cartItems.length === 0 ? (
+        data={cartItems}
+        keyExtractor={item => item.id.toString()}
+        ListEmptyComponent={
           <View style={styles.emptyState}>
             <Text style={styles.emptyTitle}>Your bag is still empty.</Text>
             <Text style={styles.emptyCopy}>
               Explore the collection and add pieces for checkout.
             </Text>
           </View>
-        ) : (
-          <>
-            {cartItems.map(item => (
-              <View key={item.id} style={styles.row}>
-                <Image source={{uri: item.imageUrl}} style={styles.image} />
-                <View style={styles.copy}>
-                  <Text numberOfLines={2} style={styles.name}>
-                    {item.productName}
-                  </Text>
-                  <Text style={styles.meta}>
-                    {item.selectedColor} / {item.selectedSize}
-                  </Text>
-                  <Text style={styles.price}>{formatCurrency(item.price)}</Text>
-                </View>
-                <QuantityControl
-                  onDecrease={() =>
-                    updateCartQuantity(item.id, Math.max(0, item.quantity - 1))
-                  }
-                  onIncrease={() => updateCartQuantity(item.id, item.quantity + 1)}
-                  value={item.quantity}
-                />
-              </View>
-            ))}
-
+        }
+        ListFooterComponent={
+          cartItems.length > 0 ? (
             <View style={styles.summaryCard}>
               <View style={styles.summaryRow}>
                 <Text style={styles.summaryLabel}>Subtotal</Text>
@@ -71,9 +47,37 @@ export const CartScreen = () => {
                 <Text style={styles.checkoutLabel}>Proceed to checkout</Text>
               </Pressable>
             </View>
-          </>
+          ) : null
+        }
+        ListHeaderComponent={
+          <View style={styles.header}>
+            <Text style={styles.eyebrow}>Bag Summary</Text>
+            <Text style={styles.title}>Cart</Text>
+          </View>
+        }
+        renderItem={({item}) => (
+          <View style={styles.row}>
+            <Image source={{uri: item.imageUrl}} style={styles.image} />
+            <View style={styles.copy}>
+              <Text numberOfLines={2} style={styles.name}>
+                {item.productName}
+              </Text>
+              <Text style={styles.meta}>
+                {item.selectedColor} / {item.selectedSize}
+              </Text>
+              <Text style={styles.price}>{formatCurrency(item.price)}</Text>
+            </View>
+            <QuantityControl
+              onDecrease={() =>
+                updateCartQuantity(item.id, Math.max(0, item.quantity - 1))
+              }
+              onIncrease={() => updateCartQuantity(item.id, item.quantity + 1)}
+              value={item.quantity}
+            />
+          </View>
         )}
-      </ScrollView>
+        showsVerticalScrollIndicator={false}
+      />
     </SafeAreaView>
   );
 };

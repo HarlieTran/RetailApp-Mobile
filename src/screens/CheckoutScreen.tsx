@@ -84,33 +84,34 @@ export const CheckoutScreen = ({navigation}: Props) => {
       <ScrollView
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}>
-        <View style={styles.productCard}>
-          <View style={styles.productTop}>
-            <Image source={{uri: primaryItem.imageUrl}} style={styles.productImage} />
-            <View style={styles.productCopy}>
-              <Text numberOfLines={2} style={styles.productName}>
-                {primaryItem.productName}
+        {cartItems.map(item => (
+          <View key={item.id} style={styles.productCard}>
+            <View style={styles.productTop}>
+              <Image source={{uri: item.imageUrl}} style={styles.productImage} />
+              <View style={styles.productCopy}>
+                <Text numberOfLines={2} style={styles.productName}>
+                {item.productName}
               </Text>
               <Text style={styles.variant}>
-                {primaryItem.selectedColor} ({primaryItem.selectedSize})
+                {item.selectedColor} ({item.selectedSize})
               </Text>
-              <Text style={styles.price}>{formatCurrency(primaryItem.price)}</Text>
+              <Text style={styles.price}>{formatCurrency(item.price)}</Text>
             </View>
           </View>
 
           <View style={styles.quantityRow}>
-            <Text style={styles.quantityLabel}>Quantity : {primaryItem.quantity}</Text>
+            <Text style={styles.quantityLabel}>Quantity : {item.quantity}</Text>
             <QuantityControl
               onDecrease={() =>
-                updateCartQuantity(primaryItem.id, Math.max(0, primaryItem.quantity - 1))
+                updateCartQuantity(item.id, Math.max(0, item.quantity - 1))
               }
               onIncrease={() =>
-                updateCartQuantity(primaryItem.id, primaryItem.quantity + 1)
+                updateCartQuantity(item.id, item.quantity + 1)
               }
-              value={primaryItem.quantity}
+              value={item.quantity}
             />
           </View>
-        </View>
+        </View>))}
 
         <View style={styles.lineItem}>
           <View style={styles.lineHeader}>
@@ -154,13 +155,13 @@ export const CheckoutScreen = ({navigation}: Props) => {
             <Text style={styles.subtotalValue}>{formatCurrency(total)}</Text>
           </View>
         </View>
-      </ScrollView>
 
-      <View style={styles.footer}>
-        <Pressable onPress={handleCheckout} style={styles.checkoutButton}>
-          <Text style={styles.checkoutButtonLabel}>Check Out Now</Text>
-        </Pressable>
-      </View>
+        <View style={styles.footer}>
+          <Pressable onPress={handleCheckout} style={styles.checkoutButton}>
+            <Text style={styles.checkoutButtonLabel}>Check Out Now</Text>
+          </Pressable>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -302,7 +303,7 @@ const styles = StyleSheet.create({
     left: 10,
     right: 10,
     bottom: 18,
-    alignItems: 'flex-end',
+    alignItems: 'center',
   },
   checkoutButton: {
     width: 108,

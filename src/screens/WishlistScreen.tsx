@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  ScrollView,
+  FlatList,
   StyleSheet,
   Text,
   View,
@@ -23,27 +23,35 @@ export const WishlistScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView
+      {/* FlatList for wishlist items */}
+      <FlatList
         contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <Text style={styles.eyebrow}>Saved Pieces</Text>
-          <Text style={styles.title}>Wishlist</Text>
-        </View>
-
-        {wishlistProducts.length === 0 ? (
+        data={wishlistProducts}
+        keyExtractor={item => (item ? item.id.toString() : Math.random().toString())}
+        ListEmptyComponent={
           <View style={styles.emptyState}>
             <Text style={styles.emptyTitle}>Nothing saved yet.</Text>
             <Text style={styles.emptyCopy}>
               Tap the Wish action on any item to keep it here.
             </Text>
           </View>
-        ) : null}
-
-        {wishlistProducts.map(product =>
+        }
+        ListFooterComponent={
+          wishlistProducts.length > 0 ? (
+            <View style={styles.hintButton}>
+              <Text style={styles.hintLabel}>Switch to the Cart tab when you are ready.</Text>
+            </View>
+          ) : null
+        }
+        ListHeaderComponent={
+          <View style={styles.header}>
+            <Text style={styles.eyebrow}>Saved Pieces</Text>
+            <Text style={styles.title}>Wishlist</Text>
+          </View>
+        }
+        renderItem={({item: product}) =>
           product ? (
             <ProductCard
-              key={product.id}
               onPress={() =>
                 navigation.navigate('ProductDetails', {
                   productId: product.id,
@@ -53,15 +61,10 @@ export const WishlistScreen = () => {
               product={product}
               wishlisted={isProductWishlisted(product.id)}
             />
-          ) : null,
-        )}
-
-        {wishlistProducts.length > 0 ? (
-          <View style={styles.hintButton}>
-            <Text style={styles.hintLabel}>Switch to the Cart tab when you are ready.</Text>
-          </View>
-        ) : null}
-      </ScrollView>
+          ) : null
+        }
+        showsVerticalScrollIndicator={false}
+      />
     </SafeAreaView>
   );
 };

@@ -1,11 +1,14 @@
 import React from 'react';
 import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootStackParamList} from '../navigation/types';
 import {useRetailApp} from '../context/AppContext';
 import {theme} from '../theme/tokens';
 import {formatAddressPreview} from '../utils/formatters';
 
 export const ProfileScreen = () => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const {
     cartCount,
     paymentMethods,
@@ -24,9 +27,14 @@ export const ProfileScreen = () => {
       <ScrollView
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <Text style={styles.eyebrow}>Your Space</Text>
-          <Text style={styles.title}>Profile</Text>
+        <View style={styles.headerRow}>
+          <View style={styles.header}>
+            <Text style={styles.eyebrow}>Your Space</Text>
+            <Text style={styles.title}>Profile</Text>
+          </View>
+          <Pressable onPress={() => navigation.navigate('EditProfile')} style={styles.editButton}>
+            <Text style={styles.editButtonText}>Edit</Text>
+          </Pressable>
         </View>
 
         <View style={styles.profileCard}>
@@ -177,5 +185,21 @@ const styles = StyleSheet.create({
     color: theme.colors.card,
     fontSize: 15,
     fontWeight: '700',
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  editButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    backgroundColor: theme.colors.elevated,
+    borderRadius: theme.radius.sm,
+  },
+  editButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: theme.colors.text,
   },
 });

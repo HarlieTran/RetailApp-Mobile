@@ -2,6 +2,7 @@ import React from 'react';
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import CartIcon from '../../App_images/cart.svg';
 import FavoriteIcon from '../../App_images/favorite.svg';
@@ -10,7 +11,9 @@ import ProfileIcon from '../../App_images/profile.svg';
 import {useRetailApp} from '../context/AppContext';
 import {CartScreen} from '../screens/CartScreen';
 import {CheckoutScreen} from '../screens/CheckoutScreen';
+import {EditProfileScreen} from '../screens/EditProfileScreen';
 import {HomeScreen} from '../screens/HomeScreen';
+import {CustomDrawerContent} from './CustomDrawerContent';
 import {LoginScreen} from '../screens/LoginScreen';
 import {ProductDetailsScreen} from '../screens/ProductDetailsScreen';
 import {ProfileScreen} from '../screens/ProfileScreen';
@@ -20,7 +23,9 @@ import {MainTabParamList, RootStackParamList} from './types';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<MainTabParamList>();
+const Drawer = createDrawerNavigator();
 
+// Main tabs for application
 const MainTabs = () => {
   const {cartCount, wishlistItems} = useRetailApp();
 
@@ -95,6 +100,18 @@ const MainTabs = () => {
   );
 };
 
+// Main drawer for Home Screen
+const MainDrawer = () => {
+  return (
+    <Drawer.Navigator 
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
+      screenOptions={{headerShown: false}}>
+      <Drawer.Screen name="ShopDrawer" component={MainTabs} />
+    </Drawer.Navigator>
+  );
+};
+
+// App navigator for Home Screen
 export const AppNavigator = () => {
   const {isAuthenticated, isBootstrapping} = useRetailApp();
 
@@ -114,12 +131,13 @@ export const AppNavigator = () => {
           <RootStack.Screen component={LoginScreen} name="Login" />
         ) : (
           <>
-            <RootStack.Screen component={MainTabs} name="MainTabs" />
+            <RootStack.Screen component={MainDrawer} name="MainTabs" />
             <RootStack.Screen
               component={ProductDetailsScreen}
               name="ProductDetails"
             />
             <RootStack.Screen component={CheckoutScreen} name="Checkout" />
+            <RootStack.Screen component={EditProfileScreen} name="EditProfile" />
           </>
         )}
       </RootStack.Navigator>

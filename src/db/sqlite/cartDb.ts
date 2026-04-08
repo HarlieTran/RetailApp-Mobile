@@ -57,6 +57,7 @@ export const addToCart = async (item: CartItem): Promise<void> => {
   });
 };
 
+// Get all cart items
 export const getCartItems = async (): Promise<CartItem[]> => {
   const db = await getDbConnection();
   const cartItems: CartItem[] = [];
@@ -88,6 +89,7 @@ export const getCartItems = async (): Promise<CartItem[]> => {
   return cartItems;
 };
 
+// Update cart item quantity
 export const updateCartItemQuantity = async (
   id: number,
   quantity: number,
@@ -103,6 +105,7 @@ export const updateCartItemQuantity = async (
   });
 };
 
+// Remove from cart
 export const removeFromCart = async (id: number): Promise<void> => {
   const db = await getDbConnection();
 
@@ -111,6 +114,7 @@ export const removeFromCart = async (id: number): Promise<void> => {
   });
 };
 
+// Clear cart
 export const clearCart = async (): Promise<void> => {
   const db = await getDbConnection();
 
@@ -119,6 +123,7 @@ export const clearCart = async (): Promise<void> => {
   });
 };
 
+// Get cart item count
 export const getCartItemCount = async (): Promise<number> => {
   const db = await getDbConnection();
   let itemCount = 0;

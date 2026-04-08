@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   input: {
-    height: 30,
+    height: 40,
     borderRadius: 4,
     borderWidth: 1,
     borderColor: '#e8e4dd',

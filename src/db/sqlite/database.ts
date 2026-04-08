@@ -4,6 +4,7 @@ SQLite.enablePromise(true);
 
 const databaseName = 'retail_app.db';
 
+// Get database connection
 export const getDbConnection = async () => {
   return SQLite.openDatabase({
     name: databaseName,
@@ -11,6 +12,7 @@ export const getDbConnection = async () => {
   });
 };
 
+// Create tables
 export const createTables = async () => {
   const db = await getDbConnection();
 

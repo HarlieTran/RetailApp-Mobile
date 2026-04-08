@@ -15,6 +15,7 @@ import {CartItem, WishlistItem} from '../types/cart.types';
 import {Product} from '../types/product.types';
 import {PaymentMethod, ShippingAddress} from '../types/user.types';
 
+// Add to cart payload
 type AddToCartPayload = {
   product: Product;
   quantity: number;
@@ -22,6 +23,7 @@ type AddToCartPayload = {
   selectedSize: string;
 };
 
+// Retail app context value
 type RetailAppContextValue = {
   isAuthenticated: boolean;
   isBootstrapping: boolean;
@@ -37,6 +39,7 @@ type RetailAppContextValue = {
   subtotal: number;
   signIn: (email: string, password: string) => boolean;
   signOut: () => void;
+  updateProfile: (name: string, email: string) => void;
   refreshAppData: () => Promise<void>;
   addProductToCart: (payload: AddToCartPayload) => Promise<void>;
   toggleProductWishlist: (product: Product) => Promise<void>;
@@ -52,6 +55,7 @@ const RetailAppContext = createContext<RetailAppContextValue | undefined>(
 
 const defaultEmail = 'john@example.com';
 
+// Retail app provider
 export const RetailAppProvider = ({
   children,
 }: {
@@ -70,6 +74,7 @@ export const RetailAppProvider = ({
   const [profileName, setProfileName] = useState('John Doe');
   const [profileEmail, setProfileEmail] = useState(defaultEmail);
 
+  // Refresh local state
   const refreshLocalState = async () => {
     try {
       const [nextCartItems, nextWishlistItems, nextAddresses, nextPaymentMethods] =
@@ -89,6 +94,7 @@ export const RetailAppProvider = ({
     }
   };
 
+  // Refresh app data
   const refreshAppData = async () => {
     try {
       const nextProducts = await loadCatalog();
@@ -118,6 +124,7 @@ export const RetailAppProvider = ({
     initialize();
   }, []);
 
+  // Sign in function
   const signIn = (email: string, password: string) => {
     if (!email.trim() || !password.trim()) {
       return false;
@@ -136,12 +143,20 @@ export const RetailAppProvider = ({
     return true;
   };
 
+  // Sign out function
   const signOut = () => {
     setIsAuthenticated(false);
     setProfileName('John Doe');
     setProfileEmail(defaultEmail);
   };
 
+  // Update profile function
+  const updateProfile = (name: string, email: string) => {
+    if (name.trim()) setProfileName(name.trim());
+    if (email.trim()) setProfileEmail(email.trim());
+  };
+
+  // Add product to cart function
   const addProductToCart = async ({
     product,
     quantity,
@@ -164,6 +179,7 @@ export const RetailAppProvider = ({
     await refreshLocalState();
   };
 
+  // Toggle product wishlist function
   const toggleProductWishlist = async (product: Product) => {
     const isNowWishlisted = await toggleWishlist({
       id: 0,
@@ -182,11 +198,13 @@ export const RetailAppProvider = ({
     }
   };
 
+  // Update cart quantity function
   const updateCartQuantity = async (id: number, quantity: number) => {
     await updateCartItemQuantity(id, quantity);
     await refreshLocalState();
   };
 
+  // Place order function
   const placeOrder = async () => {
     if (cartItems.length === 0) {
       Alert.alert('Cart Empty', 'Add an item before checking out.');
@@ -198,10 +216,12 @@ export const RetailAppProvider = ({
     return true;
   };
 
+  // Get product by id function
   const getProductById = (productId: string) => {
     return products.find(product => product.id === productId);
   };
 
+  // Check if product is wishlisted function
   const isProductWishlisted = (productId: string) => {
     return wishlistItems.some(item => item.productId === productId);
   };
@@ -229,6 +249,7 @@ export const RetailAppProvider = ({
         subtotal,
         signIn,
         signOut,
+        updateProfile,
         refreshAppData,
         addProductToCart,
         toggleProductWishlist,

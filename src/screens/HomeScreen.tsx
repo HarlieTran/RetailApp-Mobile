@@ -118,6 +118,12 @@ export const HomeScreen = () => {
         }
         showsVerticalScrollIndicator={false}>
         <View style={styles.searchRow}>
+          <Pressable onPress={() => (navigation as any).toggleDrawer()} style={styles.brandWrapper}>
+            <View style={styles.logoCircle}>
+              <Text style={styles.logoLetter}>P</Text>
+            </View>
+            <Text style={styles.brandName}>Platzi</Text>
+          </Pressable>
           <View style={styles.searchBox}>
             <SearchIcon height={14} width={14} />
             <TextInput
@@ -138,6 +144,7 @@ export const HomeScreen = () => {
           <View
             onLayout={event => setSliderWidth(event.nativeEvent.layout.width)}
             style={styles.heroCard}>
+            {/* FlatList for slider products */}
             <FlatList
               data={sliderData}
               horizontal
@@ -235,6 +242,32 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+  },
+  brandWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginRight: 4,
+  },
+  logoCircle: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#335243',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logoLetter: {
+    color: '#ffffff',
+    fontSize: 12,
+    fontWeight: '800',
+    fontFamily: theme.typography.hero,
+  },
+  brandName: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: theme.colors.text,
+    fontFamily: theme.typography.hero,
   },
   searchBox: {
     flex: 1,

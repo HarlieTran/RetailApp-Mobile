@@ -3,6 +3,7 @@ export type RootStackParamList = {
   MainTabs: undefined;
   ProductDetails: {productId: string};
   Checkout: undefined;
+  EditProfile: undefined;
 };
 
 export type MainTabParamList = {
