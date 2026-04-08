@@ -118,6 +118,7 @@ export const HomeScreen = () => {
         }
         showsVerticalScrollIndicator={false}>
         <View style={styles.searchRow}>
+          {/* Pressable logo for drawer toggle */}
           <Pressable onPress={() => (navigation as any).toggleDrawer()} style={styles.brandWrapper}>
             <View style={styles.logoCircle}>
               <Text style={styles.logoLetter}>P</Text>
